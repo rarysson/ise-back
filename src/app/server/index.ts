@@ -18,7 +18,7 @@ export class App {
       this.initRoutes()
       this.initMongo()
 
-      const server = this.app.listen(3000)
+      const server = this.app.listen(process.env.PORT || 3000)
       console.log(server.address())
 
     } catch (error) {

@@ -96,7 +96,7 @@ const IdebBrasilSchema = new mongoose.Schema({
   },
 
 }, {
-  collection: 'IdebBrasil'
+  collection: 'idebbrasil'
 })
 
 IdebBrasilSchema.plugin(mongoosePaginate)

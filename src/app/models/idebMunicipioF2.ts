@@ -20,31 +20,31 @@ const IdebMunicipioF2Schema = new mongoose.Schema({
   },
   IDEB2005: {
     type: Number,
-    required: true,
+    required: false,
   },
   IDEB2007: {
     type: Number,
-    required: true,
+    required: false,
   },
   IDEB2009: {
     type: Number,
-    required: true,
+    required: false,
   },
   IDEB2011: {
     type: Number,
-    required: true,
+    required: false,
   },
   IDEB2013: {
     type: Number,
-    required: true,
+    required: false,
   },
   IDEB2015: {
     type: Number,
-    required: true,
+    required: false,
   },
   IDEB2017: {
     type: Number,
-    required: true,
+    required: false,
   },
 
 }, {

@@ -28,7 +28,7 @@ const IdebEscolaEMSchema = new mongoose.Schema({
   },
   IDEB2017: {
     type: Number,
-    required: true,
+    required: false,
   },
 
 }, {

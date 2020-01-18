@@ -20,7 +20,7 @@ const IdebMunicipioEMSchema = new mongoose.Schema({
   },
   IDEB2017: {
     type: Number,
-    required: true,
+    required: false,
   },
 
 }, {

@@ -16,13 +16,15 @@
     "express": "^4.17.1",
     "express-cli": "0.0.1",
     "mongodb": "^3.5.0",
-    "mongoose": "^5.8.7"
+    "mongoose": "^5.8.7",
+    "mongoose-paginate": "^5.0.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.2",
     "@types/mongodb": "^3.3.14",
     "@types/mongoose": "^5.5.41",
+    "@types/mongoose-paginate": "^5.0.8",
     "@types/node": "^13.1.7",
     "nodemon": "^2.0.2",
     "sucrase": "^3.12.1",

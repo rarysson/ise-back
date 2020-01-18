@@ -53,4 +53,4 @@ const IdebMunicipioF2Schema = new mongoose.Schema({
 
 IdebMunicipioF2Schema.plugin(mongoosePaginate)
 
-export const IdedMunicipioF2 = mongoose.model('IdebMunicipioF2', IdebMunicipioF2Schema)
+export const IdebMunicipioF2 = mongoose.model('IdebMunicipioF2', IdebMunicipioF2Schema)

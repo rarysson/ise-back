@@ -61,4 +61,4 @@ const IdebEscolaF2Schema = new mongoose.Schema({
 
 IdebEscolaF2Schema.plugin(mongoosePaginate)
 
-export const IdedEscolaF2 = mongoose.model('IdebEscolaF2', IdebEscolaF2Schema)
+export const IdebEscolaF2 = mongoose.model('IdebEscolaF2', IdebEscolaF2Schema)

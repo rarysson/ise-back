@@ -29,4 +29,4 @@ const IdebMunicipioEMSchema = new mongoose.Schema({
 
 IdebMunicipioEMSchema.plugin(mongoosePaginate)
 
-export const IdedMunicipioEM = mongoose.model('IdebMunicipioEM', IdebMunicipioEMSchema)
+export const IdebMunicipioEM = mongoose.model('IdebMunicipioEM', IdebMunicipioEMSchema)

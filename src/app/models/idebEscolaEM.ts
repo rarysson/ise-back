@@ -37,4 +37,4 @@ const IdebEscolaEMSchema = new mongoose.Schema({
 
 IdebEscolaEMSchema.plugin(mongoosePaginate)
 
-export const IdedEscolaEM = mongoose.model('IdebEscolaEM', IdebEscolaEMSchema)
+export const IdebEscolaEM = mongoose.model('IdebEscolaEM', IdebEscolaEMSchema)

@@ -9,5 +9,14 @@ A API está sendo executada pelo [Heroku](https://api-infoedu.herokuapp.com/).
 ### Buscar dados IDEB do Brasil
 rota: {rotabase}/brasil
 
-### Buscar dados IDEB por Região
+### Buscar dados IDEB por Região/Estado
 rota: {rotabase}/regiao/:regiao
+
+### Buscar dados IDEB por Município
+rota: {rotabase}/municipio/:codigomunicipio
+
+### Buscar dados IDEB por Escola
+rota: {rotabase}/municipio/:codigoescola
+
+### Buscar melhor Escola por Município
+rota: {rotabase}/escola/melhor/ideb/:municipio

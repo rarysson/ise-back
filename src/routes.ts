@@ -7,4 +7,10 @@ routes.get('/brasil', idebController.brasil)
 
 routes.get('/regiao/:regiao', idebController.regiao)
 
+routes.get('/municipio/:codigomunicipio', idebController.municipio)
+
+routes.get('/escola/:codigoescola', idebController.escola)
+
+routes.get('/escola/melhor/ideb/:municipio', idebController.melhorescola)
+
 export { routes } 

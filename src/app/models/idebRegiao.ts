@@ -101,4 +101,4 @@ const IdebRegiaoSchema = new mongoose.Schema({
 
 IdebRegiaoSchema.plugin(mongoosePaginate)
 
-export const IdedRegiao = mongoose.model('IdebRegiao', IdebRegiaoSchema)
+export const IdebRegiao = mongoose.model('IdebRegiao', IdebRegiaoSchema)

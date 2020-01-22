@@ -37,44 +37,44 @@ class IdebController {
   public municipio = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const tam = await IdebMunicipioF1.countDocuments({ CodigoMunicipio: req.params.codigomunicipio })
-
-      const f1 = await IdebMunicipioF1.aggregate([{ $match: { CodigoMunicipio: req.params.codigomunicipio } }, {
+      const f1 = await IdebMunicipioF1.aggregate([{ $match: { CodigoMunicipio: Number(req.params.codigomunicipio) } }, {
         $group: {
           _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
-          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' },
+          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1},
         }
       }, {
         $project: {
-          IDEB2005: { $divide: ['$soma2005', tam] }, IDEB2007: { $divide: ['$soma2007', tam] }, IDEB2009: { $divide: ['$soma2009', tam] },
-          IDEB2011: { $divide: ['$soma2011', tam] }, IDEB2013: { $divide: ['$soma2013', tam] }, IDEB2015: { $divide: ['$soma2015', tam] }, IDEB2017: { $divide: ['$soma2017', tam] }
+          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
+          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
 
-      const f2 = await IdebMunicipioF2.aggregate([{ $match: { CodigoMunicipio: req.params.codigomunicipio } }, {
+      const f2 = await IdebMunicipioF2.aggregate([{ $match: { CodigoMunicipio: Number(req.params.codigomunicipio) } }, {
         $group: {
           _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
-          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' },
+          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' },soma: { $sum: 1},
         }
       }, {
         $project: {
-          IDEB2005: { $divide: ['$soma2005', tam] }, IDEB2007: { $divide: ['$soma2007', tam] }, IDEB2009: { $divide: ['$soma2009', tam] },
-          IDEB2011: { $divide: ['$soma2011', tam] }, IDEB2013: { $divide: ['$soma2013', tam] }, IDEB2015: { $divide: ['$soma2015', tam] }, IDEB2017: { $divide: ['$soma2017', tam] }
+          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
+          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
 
-      const em = await IdebMunicipioEM.aggregate([{ $match: { CodigoMunicipio: req.params.codigomunicipio } }, {
+      const em = await IdebMunicipioEM.aggregate([{ $match: { CodigoMunicipio: Number(req.params.codigomunicipio) } }, {
         $group: {
-          _id: null, soma2017: { $sum: '$IDEB2017' },
+          _id: null, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1},
         }
       }, {
         $project: {
-          IDEB2017: { $divide: ['$soma2017', tam] }
+          IDEB2017: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
+
+      console.log(em)
 
       res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
 
@@ -86,17 +86,15 @@ class IdebController {
   public municipioNome = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const tam = await IdebMunicipioF1.countDocuments({ NomeMunicipio: {$regex: req.params.municipio } })
-
       const f1 = await IdebMunicipioF1.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
         $group: {
           _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
-          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' },
+          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1}
         }
       }, {
         $project: {
-          IDEB2005: { $divide: ['$soma2005', tam] }, IDEB2007: { $divide: ['$soma2007', tam] }, IDEB2009: { $divide: ['$soma2009', tam] },
-          IDEB2011: { $divide: ['$soma2011', tam] }, IDEB2013: { $divide: ['$soma2013', tam] }, IDEB2015: { $divide: ['$soma2015', tam] }, IDEB2017: { $divide: ['$soma2017', tam] }
+          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
+          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
@@ -104,28 +102,28 @@ class IdebController {
       const f2 = await IdebMunicipioF2.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
         $group: {
           _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
-          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' },
+          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1}
         }
       }, {
         $project: {
-          IDEB2005: { $divide: ['$soma2005', tam] }, IDEB2007: { $divide: ['$soma2007', tam] }, IDEB2009: { $divide: ['$soma2009', tam] },
-          IDEB2011: { $divide: ['$soma2011', tam] }, IDEB2013: { $divide: ['$soma2013', tam] }, IDEB2015: { $divide: ['$soma2015', tam] }, IDEB2017: { $divide: ['$soma2017', tam] }
+          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
+          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
 
       const em = await IdebMunicipioEM.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
         $group: {
-          _id: null, soma2017: { $sum: '$IDEB2017' },
+          _id: null, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1}
         }
       }, {
         $project: {
-          IDEB2017: { $divide: ['$soma2017', tam] }
+          IDEB2017: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
 
-      res.send({ tam, 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
+      res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
 
     } catch (error) {
       return next(error)

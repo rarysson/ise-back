@@ -15,8 +15,6 @@ class IdebController {
 
       const ideb = await IdebBrasil.find({ Rede: 'Total' })
 
-      console.log(ideb)
-
       res.send(ideb)
 
     } catch (error) {
@@ -27,7 +25,7 @@ class IdebController {
   public regiao = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const ideb = await IdebRegiao.find({ Rede: 'Total', Regiao: req.params.regiao })
+      const ideb = await IdebRegiao.find({ Rede: 'Total', Regiao: {$regex: req.params.regiao } })
 
       res.send(ideb)
 
@@ -39,7 +37,7 @@ class IdebController {
   public municipio = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const tam = await IdebMunicipioF1.count({ CodigoMunicipio: req.params.codigomunicipio })
+      const tam = await IdebMunicipioF1.countDocuments({ CodigoMunicipio: req.params.codigomunicipio })
 
       const f1 = await IdebMunicipioF1.aggregate([{ $match: { CodigoMunicipio: req.params.codigomunicipio } }, {
         $group: {
@@ -85,14 +83,63 @@ class IdebController {
     }
   }
 
+  public municipioNome = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+      const tam = await IdebMunicipioF1.countDocuments({ NomeMunicipio: {$regex: req.params.municipio } })
+
+      const f1 = await IdebMunicipioF1.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
+        $group: {
+          _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
+          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' },
+        }
+      }, {
+        $project: {
+          IDEB2005: { $divide: ['$soma2005', tam] }, IDEB2007: { $divide: ['$soma2007', tam] }, IDEB2009: { $divide: ['$soma2009', tam] },
+          IDEB2011: { $divide: ['$soma2011', tam] }, IDEB2013: { $divide: ['$soma2013', tam] }, IDEB2015: { $divide: ['$soma2015', tam] }, IDEB2017: { $divide: ['$soma2017', tam] }
+        }
+      }
+      ])
+
+      const f2 = await IdebMunicipioF2.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
+        $group: {
+          _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
+          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' },
+        }
+      }, {
+        $project: {
+          IDEB2005: { $divide: ['$soma2005', tam] }, IDEB2007: { $divide: ['$soma2007', tam] }, IDEB2009: { $divide: ['$soma2009', tam] },
+          IDEB2011: { $divide: ['$soma2011', tam] }, IDEB2013: { $divide: ['$soma2013', tam] }, IDEB2015: { $divide: ['$soma2015', tam] }, IDEB2017: { $divide: ['$soma2017', tam] }
+        }
+      }
+      ])
+
+      const em = await IdebMunicipioEM.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
+        $group: {
+          _id: null, soma2017: { $sum: '$IDEB2017' },
+        }
+      }, {
+        $project: {
+          IDEB2017: { $divide: ['$soma2017', tam] }
+        }
+      }
+      ])
+
+      res.send({ tam, 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
+
+    } catch (error) {
+      return next(error)
+    }
+  }
+
   public escola = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const f1 = await IdebEscolaF1.find({ CodigoEscola: req.params.codigoescola })
+      const f1 = await IdebEscolaF1.find({ NomeEscola: {$regex: req.params.escola } })
 
-      const f2 = await IdebEscolaF2.find({ CodigoEscola: req.params.codigoescola })
+      const f2 = await IdebEscolaF2.find({ NomeEscola: {$regex: req.params.escola } })
 
-      const em = await IdebEscolaEM.find({ CodigoEscola: req.params.codigoescola })
+      const em = await IdebEscolaEM.find({ NomeEscola: {$regex: req.params.escola } })
 
       res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
 
@@ -104,11 +151,11 @@ class IdebController {
   public melhorescola = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const f1 = await IdebEscolaF1.find({ NomeMunicipio: req.params.municipio }).sort({ IDEB2017: -1 }).limit(1)
+      const f1 = await IdebEscolaF1.find({ NomeMunicipio: {$regex: req.params.municipio } }).sort({ IDEB2017: -1 }).limit(1)
 
-      const f2 = await IdebEscolaF2.find({ NomeMunicipio: req.params.municipio }).sort({ IDEB2017: -1 }).limit(1)
+      const f2 = await IdebEscolaF2.find({ NomeMunicipio: {$regex: req.params.municipio } }).sort({ IDEB2017: -1 }).limit(1)
 
-      const em = await IdebEscolaEM.find({ NomeMunicipio: req.params.municipio }).sort({ IDEB2017: -1 }).limit(1)
+      const em = await IdebEscolaEM.find({ NomeMunicipio: {$regex: req.params.municipio } }).sort({ IDEB2017: -1 }).limit(1)
 
       res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
 

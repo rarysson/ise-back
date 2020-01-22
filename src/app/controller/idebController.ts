@@ -44,8 +44,8 @@ class IdebController {
         }
       }, {
         $project: {
-          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
-          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
+          IDEB2005F1: { $divide: ['$soma2005', '$soma'] }, IDEB2007F1: { $divide: ['$soma2007', '$soma'] }, IDEB2009F1: { $divide: ['$soma2009', '$soma'] },
+          IDEB2011F1: { $divide: ['$soma2011', '$soma'] }, IDEB2013F1: { $divide: ['$soma2013', '$soma'] }, IDEB2015F1: { $divide: ['$soma2015', '$soma'] }, IDEB2017F1: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
@@ -57,8 +57,8 @@ class IdebController {
         }
       }, {
         $project: {
-          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
-          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
+          IDEB2005F2: { $divide: ['$soma2005', '$soma'] }, IDEB2007F2: { $divide: ['$soma2007', '$soma'] }, IDEB2009F2: { $divide: ['$soma2009', '$soma'] },
+          IDEB2011F2: { $divide: ['$soma2011', '$soma'] }, IDEB2013F2: { $divide: ['$soma2013', '$soma'] }, IDEB2015F2: { $divide: ['$soma2015', '$soma'] }, IDEB2017F2: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
@@ -69,61 +69,14 @@ class IdebController {
         }
       }, {
         $project: {
-          IDEB2017: { $divide: ['$soma2017', '$soma'] }
+          IDEB2017EM: { $divide: ['$soma2017', '$soma'] }
         }
       }
       ])
 
-      console.log(em)
+      const final = Object.assign(Object.assign(f1[0], f2[0]), em[0])
 
-      res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
-
-    } catch (error) {
-      return next(error)
-    }
-  }
-
-  public municipioNome = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-
-      const f1 = await IdebMunicipioF1.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
-        $group: {
-          _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
-          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1}
-        }
-      }, {
-        $project: {
-          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
-          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
-        }
-      }
-      ])
-
-      const f2 = await IdebMunicipioF2.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
-        $group: {
-          _id: null, soma2005: { $sum: '$IDEB2005' }, soma2007: { $sum: '$IDEB2007' }, soma2009: { $sum: '$IDEB2009' },
-          soma2011: { $sum: '$IDEB2011' }, soma2013: { $sum: '$IDEB2013' }, soma2015: { $sum: '$IDEB2015' }, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1}
-        }
-      }, {
-        $project: {
-          IDEB2005: { $divide: ['$soma2005', '$soma'] }, IDEB2007: { $divide: ['$soma2007', '$soma'] }, IDEB2009: { $divide: ['$soma2009', '$soma'] },
-          IDEB2011: { $divide: ['$soma2011', '$soma'] }, IDEB2013: { $divide: ['$soma2013', '$soma'] }, IDEB2015: { $divide: ['$soma2015', '$soma'] }, IDEB2017: { $divide: ['$soma2017', '$soma'] }
-        }
-      }
-      ])
-
-      const em = await IdebMunicipioEM.aggregate([{ $match: { NomeMunicipio: {$regex: req.params.municipio } } }, {
-        $group: {
-          _id: null, soma2017: { $sum: '$IDEB2017' }, soma: { $sum: 1}
-        }
-      }, {
-        $project: {
-          IDEB2017: { $divide: ['$soma2017', '$soma'] }
-        }
-      }
-      ])
-
-      res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
+      res.send( final )
 
     } catch (error) {
       return next(error)

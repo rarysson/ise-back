@@ -15,9 +15,6 @@ rota: {rotabase}/regiao/:regiao
 ### Buscar dados IDEB por Município por Código
 rota: {rotabase}/municipio/:codigomunicipio
 
-### Buscar dados IDEB por Município por Nome
-rota: {rotabase}/municipio/:codigomunicipio
-
 ### Buscar dados IDEB por Escola
 rota: {rotabase}/municipio/:escola
 

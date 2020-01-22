@@ -9,8 +9,6 @@ routes.get('/regiao/:regiao', idebController.regiao)
 
 routes.get('/municipio/:codigomunicipio', idebController.municipio)
 
-routes.get('/municipio/nome/:municipio', idebController.municipioNome)
-
 routes.get('/escola/:escola', idebController.escola)
 
 routes.get('/escola/melhor/ideb/:municipio', idebController.melhorescola)

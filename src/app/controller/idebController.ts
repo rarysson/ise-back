@@ -83,16 +83,36 @@ class IdebController {
     }
   }
 
+  public escolaMunicipio = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      
+      const f1 = await IdebEscolaF1.find({CodigoMunicipio: Number(req.params.codigomunicipio) }, {_id: 0, CodigoEscola: 1, NomeEscola: 1})
+
+      const f2 = await IdebEscolaF2.find({CodigoMunicipio: Number(req.params.codigomunicipio) }, {_id: 0, CodigoEscola: 1, NomeEscola: 1})
+
+      const em = await IdebEscolaEM.find({CodigoMunicipio: Number(req.params.codigomunicipio) }, {_id: 0, CodigoEscola: 1, NomeEscola: 1})
+
+      const final = Object.assign(Object.assign(f1, f2), em)
+
+      res.send( final )
+
+    } catch (error) {
+      return next(error)
+    }
+  } 
+
   public escola = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const f1 = await IdebEscolaF1.find({ NomeEscola: {$regex: req.params.escola } })
+      const f1 = await IdebEscolaF1.find({ CodigoEscola: Number(req.params.codigoescola) }, {_id: 0})
 
-      const f2 = await IdebEscolaF2.find({ NomeEscola: {$regex: req.params.escola } })
+      const f2 = await IdebEscolaF2.find({ CodigoEscola: Number(req.params.codigoescola) },  {_id: 0})
 
-      const em = await IdebEscolaEM.find({ NomeEscola: {$regex: req.params.escola } })
+      const em = await IdebEscolaEM.find({ CodigoEscola: Number(req.params.codigoescola) },  {_id: 0})
 
-      res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
+      const final = Object.assign(Object.assign(f1[0], f2[0]), em[0])
+
+      res.send( final )
 
     } catch (error) {
       return next(error)
@@ -102,13 +122,13 @@ class IdebController {
   public melhorescola = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const f1 = await IdebEscolaF1.find({ NomeMunicipio: {$regex: req.params.municipio } }).sort({ IDEB2017: -1 }).limit(1)
+      const f1 = await IdebEscolaF1.find({ CodigoMunicipio: Number(req.params.codigomunicipio) }).sort({ IDEB2017F1: -1 }).limit(1)
 
-      const f2 = await IdebEscolaF2.find({ NomeMunicipio: {$regex: req.params.municipio } }).sort({ IDEB2017: -1 }).limit(1)
+      const f2 = await IdebEscolaF2.find({ CodigoMunicipio: Number(req.params.codigomunicipio) }).sort({ IDEB2017F2: -1 }).limit(1)
 
-      const em = await IdebEscolaEM.find({ NomeMunicipio: {$regex: req.params.municipio } }).sort({ IDEB2017: -1 }).limit(1)
+      const em = await IdebEscolaEM.find({ CodigoMunicipio: Number(req.params.codigomunicipio) }).sort({ IDEB2017EM: -1 }).limit(1)
 
-      res.send({ 'Ensinofundamental1': f1, 'EnsinoFundamental2': f2, 'EnsinoMedio': em })
+      res.send( { 'Ensino Fundamental 1': f1, 'Ensino Fundamental 2': f2, 'Ensino Medio': em } )
 
     } catch (error) {
       return next(error)

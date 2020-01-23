@@ -16,7 +16,10 @@ rota: {rotabase}/regiao/:regiao
 rota: {rotabase}/municipio/:codigomunicipio
 
 ### Buscar dados IDEB por Escola
-rota: {rotabase}/municipio/:escola
+rota: {rotabase}/escola/:codigoescola
 
 ### Buscar melhor Escola por Município
-rota: {rotabase}/escola/melhor/ideb/:municipio
+rota: {rotabase}/escola/melhor/ideb/:codigomunicipio
+
+### Buscar dados Escolas
+rota: {rotabase}/escola/municipio/:codigomunicipio

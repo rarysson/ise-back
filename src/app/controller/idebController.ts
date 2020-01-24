@@ -104,11 +104,25 @@ class IdebController {
   public escola = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-      const f1 = await IdebEscolaF1.find({ CodigoEscola: Number(req.params.codigoescola) }, {_id: 0})
+      const f1 = await IdebEscolaF1.aggregate([{ $match: { CodigoEscola: Number(req.params.codigoescola) } }, {
+        $group: {
+          _id: null, IDEB2005F1: { $sum: '$IDEB2005F1' }, IDEB2007F1: { $sum: '$IDEB2007F1' }, IDEB2009F1: { $sum: '$IDEB2009F1' },
+          IDEB2011F1: { $sum: '$IDEB2011F1' }, IDEB2013F1: { $sum: '$IDEB2013F1' }, IDEB2015F1: { $sum: '$IDEB2015F1' }, IDEB2017F1: { $sum: '$IDEB2017F1' }
+        }
+      }])
 
-      const f2 = await IdebEscolaF2.find({ CodigoEscola: Number(req.params.codigoescola) },  {_id: 0})
+      const f2 = await IdebEscolaF2.aggregate([{ $match: { CodigoEscola: Number(req.params.codigoescola) } }, {
+        $group: {
+          _id: null, IDEB2005F2: { $sum: '$IDEB2005F2' }, IDEB2007F2: { $sum: '$IDEB2007F2' }, IDEB2009F2: { $sum: '$IDEB2009F2' },
+          IDEB2011F2: { $sum: '$IDEB2011F2' }, IDEB2013F2: { $sum: '$IDEB2013F2' }, IDEB2015F2: { $sum: '$IDEB2015F2' }, IDEB2017F2: { $sum: '$IDEB2017F2' }
+        }
+      }])
 
-      const em = await IdebEscolaEM.find({ CodigoEscola: Number(req.params.codigoescola) },  {_id: 0})
+      const em = await IdebEscolaEM.aggregate([{ $match: { CodigoEscola: Number(req.params.codigoescola) } }, {
+        $group: {
+          _id: null, IDEB2017EM: { $sum: '$IDEB2017EM' },
+        }
+      }])
 
       const final = Object.assign(Object.assign(f1[0], f2[0]), em[0])
 

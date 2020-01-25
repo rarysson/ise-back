@@ -124,7 +124,7 @@ class IdebController {
         }
       }])
 
-      const final = Object.assign(Object.assign(f1[0], f2[0]), em[0])
+      const final = Object.assign(Object.assign(f1[0] || {}, f2[0] || {}), em[0] || {})
 
       res.send( final )
 
